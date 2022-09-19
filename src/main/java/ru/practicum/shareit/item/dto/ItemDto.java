@@ -1,7 +1,42 @@
 package ru.practicum.shareit.item.dto;
 
-/**
- * TODO Sprint add-controllers.
- */
+import lombok.*;
+import ru.practicum.shareit.user.model.User;
+
+import javax.validation.constraints.NotBlank;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class ItemDto {
+    private Long id;
+    @NotBlank(groups = {CreateItemValidate.class})
+    private String name;
+    @NotBlank(groups = {CreateItemValidate.class})
+    private String description;
+
+    private Boolean available;
+    private User owner;
+    private String request;
+
+    public ItemDto(Long id, String name, String description, Boolean available) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.available = available;
+    }
+
+    @Override
+    public String toString() {
+        return "ItemDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", available=" + available +
+                ", owner=" + owner +
+                ", request='" + request + '\'' +
+                '}';
+    }
 }
