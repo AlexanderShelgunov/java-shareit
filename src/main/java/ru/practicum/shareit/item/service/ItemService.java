@@ -17,7 +17,7 @@ public interface ItemService {
 
     UserDto getUserOwner(Long userId);
 
-    List<ItemDto> getAllItemsByOwner(Long UserId);
+    List<ItemDto> getAllItemsByOwner(Long userId);
 
     List<ItemDto> searchItem(Long userId, String text);
 }
