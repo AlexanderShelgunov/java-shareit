@@ -74,23 +74,23 @@ public class ItemController {
 
     @GetMapping("/search")
     public List<ItemDto> searchItem(@RequestParam String text,
-                                    @RequestHeader("X-Sharer-User-Id") Long UserId) {
+                                    @RequestHeader("X-Sharer-User-Id") Long userId) {
 
         if (text.equals("")) {
             return new ArrayList<>();
         }
 
         log.info("Поиск предмета по тексту = {}", text);
-        return itemService.searchItem(UserId, text);
+        return itemService.searchItem(userId, text);
     }
 
 
-    public void checkUserOwner(Long UserId) {
-        UserDto user = itemService.getUserOwner(UserId);
+    public void checkUserOwner(Long userId) {
+        UserDto user = itemService.getUserOwner(userId);
 
         if (user == null) {
-            log.info("Владелец вещи с ID = {} не найден ", UserId);
-            throw new NotFoundException("Владелец вещи с ID = " + UserId +
+            log.info("Владелец вещи с ID = {} не найден ", userId);
+            throw new NotFoundException("Владелец вещи с ID = " + userId +
                     " не найден");
         }
     }
