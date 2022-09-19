@@ -12,6 +12,7 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.UserService;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,7 +64,7 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemDto> getAllItemsByOwner(Long userId) {
         return itemStorage.getAllItemsByOwner()
                 .stream()
-                .filter(item -> item.getOwner().getId() == userId)
+                .filter(item -> Objects.equals(item.getOwner().getId(), userId))
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
     }
