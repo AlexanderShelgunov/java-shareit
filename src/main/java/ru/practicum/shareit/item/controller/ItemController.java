@@ -20,7 +20,7 @@ import java.util.List;
 public class ItemController {
 
     @Autowired
-    ItemService itemService;
+    private ItemService itemService;
 
     @PostMapping
     public ItemDto addNewItem(@Validated({CreateItemValidate.class}) @RequestBody ItemDto itemDto,
@@ -85,7 +85,7 @@ public class ItemController {
     }
 
 
-    public void checkUserOwner(Long userId) {
+    private void checkUserOwner(Long userId) {
         UserDto user = itemService.getUserOwner(userId);
 
         if (user == null) {

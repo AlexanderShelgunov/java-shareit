@@ -7,6 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -26,17 +27,5 @@ public class ItemDto {
         this.name = name;
         this.description = description;
         this.available = available;
-    }
-
-    @Override
-    public String toString() {
-        return "ItemDto{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", available=" + available +
-                ", owner=" + owner +
-                ", request='" + request + '\'' +
-                '}';
     }
 }

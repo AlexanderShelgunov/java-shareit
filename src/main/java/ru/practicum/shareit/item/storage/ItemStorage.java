@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.storage;
 
 import org.springframework.stereotype.Component;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
@@ -16,5 +17,5 @@ public interface ItemStorage {
 
     List<Item> getAllItemsByOwner();
 
-    List<Item> searchItem();
+    List<ItemDto> searchItem(String text);
 }

@@ -32,4 +32,11 @@ public class ErrorHandler {
         log.info("500 {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    public ErrorResponse handelThrowable(final Throwable e) {
+        log.info("405 {}", e.getMessage());
+        return new ErrorResponse(e.getMessage());
+    }
 }
