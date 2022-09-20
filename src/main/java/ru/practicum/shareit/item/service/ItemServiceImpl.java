@@ -72,12 +72,6 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> searchItem(Long userId, String text) {
         return itemStorage.searchItem(text);
-//                .stream()
-//                .filter(item -> (
-//                        (item.getAvailable() && item.getName().toLowerCase().contains(text.toLowerCase()))) ||
-//                        (item.getAvailable() && item.getDescription().toLowerCase().contains(text.toLowerCase())))
-//                .map(ItemMapper::toItemDto)
-//                .collect(Collectors.toList());
     }
 
     @Override
