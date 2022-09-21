@@ -1,8 +1,7 @@
 package ru.practicum.shareit.exception;
 
-public class Throwable extends RuntimeException {
-
-    public Throwable(String message) {
+public class handelArgumentNotValidException extends RuntimeException {
+    public handelArgumentNotValidException(String message) {
         super(message);
 
     }
