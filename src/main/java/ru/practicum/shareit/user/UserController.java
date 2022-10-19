@@ -2,12 +2,9 @@ package ru.practicum.shareit.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.exception.ServerException;
 import ru.practicum.shareit.exception.ValidateException;
-import ru.practicum.shareit.user.dto.CreateUserValidate;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import java.util.List;
@@ -18,7 +15,8 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+//    private UserService userService;
+    private UserServiceImpl userService;
 
     @GetMapping
     public List<UserDto> getAllUsers() {
@@ -27,14 +25,14 @@ public class UserController {
     }
 
     @PostMapping
-    public UserDto createUser(@Validated({CreateUserValidate.class}) @RequestBody UserDto userDto) {
+    public UserDto createUser(@RequestBody UserDto userDto) {
 
         if (userDto.getEmail() == null || "".equals(userDto.getEmail()) || !userDto.getEmail().contains("@")) {
             log.info("электронная почта {} не корректная", userDto.getEmail());
             throw new ValidateException("электронная почта " + userDto.getEmail() +
                     " не может быть пустой и должна содержать символ @");
         }
-        checkEmailIsFree(userDto);
+
         log.info("Сохраняемый пользователь: {}", userDto);
         return userService.createUser(userDto);
     }
@@ -55,7 +53,6 @@ public class UserController {
                     " не найден");
         }
 
-        checkEmailIsFree(userDto);
         log.info("Обновляемый пользователь: {}", userDto);
         return userService.updateUser(userDto, userId);
     }
@@ -66,13 +63,4 @@ public class UserController {
         userService.deleteUser(userId);
     }
 
-    public void checkEmailIsFree(UserDto userDto) {
-        List<UserDto> users = userService.getAllUsers();
-
-        if (users.contains(userDto)) {
-            log.info("Пользователь с почтой {} уже существует ", userDto.getEmail());
-            throw new ServerException("Пользователь с почтой " + userDto.getEmail() +
-                    " уже существует");
-        }
-    }
 }
