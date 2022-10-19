@@ -50,7 +50,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ErrorResponse ForbiddenException(final ForbiddenException e) {
+    public ErrorResponse forbiddenException(final ForbiddenException e) {
         log.info("403 {}", e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
     }
