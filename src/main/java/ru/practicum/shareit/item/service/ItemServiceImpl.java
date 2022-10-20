@@ -12,7 +12,7 @@ import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidateException;
 import ru.practicum.shareit.item.ItemRepository;
-import ru.practicum.shareit.item.comment.Comment;
+import ru.practicum.shareit.item.comment.model.Comment;
 import ru.practicum.shareit.item.comment.CommentRepository;
 import ru.practicum.shareit.item.comment.dto.CommentDto;
 import ru.practicum.shareit.item.comment.dto.CommentMapper;
@@ -46,7 +46,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemOutputDto> getAllItemsByOwner(Long ownerId) {
-        return itemRepository.findAll().stream()
+        return itemRepository.findAllByOrderByIdAsc().stream()
                 .filter(item -> Objects.equals(item.getOwner().getId(), ownerId))
                 .map(item -> convertToItemOutputDto(item, ownerId))
                 .collect(Collectors.toList());

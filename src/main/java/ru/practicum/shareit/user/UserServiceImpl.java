@@ -45,8 +45,6 @@ public class UserServiceImpl {
         User userWrap = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден " + userDto.getId()));
 
-//        User updateUser = userStorage.updateUser(newUser, userId);
-
         if (user.getName() != null) {
             userWrap.setName(user.getName());
         }

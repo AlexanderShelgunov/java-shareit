@@ -1,16 +1,20 @@
 package ru.practicum.shareit.booking.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import ru.practicum.shareit.booking.model.BookingStatus;
-import ru.practicum.shareit.item.dto.ItemInputDto;
-import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.User;
 
 import javax.validation.constraints.Future;
 import java.time.LocalDateTime;
 
-@Data
 @Builder
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class BookingDto {
     private Long id;
 
@@ -20,7 +24,7 @@ public class BookingDto {
     @Future
     private LocalDateTime end;
 
-    private ItemInputDto item;
-    private UserDto booker;
+    private Item item;
+    private User booker;
     private BookingStatus status;
 }

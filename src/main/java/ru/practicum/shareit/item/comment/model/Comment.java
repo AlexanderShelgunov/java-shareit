@@ -1,9 +1,6 @@
-package ru.practicum.shareit.item.comment;
+package ru.practicum.shareit.item.comment.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
@@ -12,9 +9,11 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Builder
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 @Entity
 @Table(name = "comments")
 public class Comment {

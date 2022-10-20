@@ -1,14 +1,17 @@
 package ru.practicum.shareit.item.dto;
 
-import lombok.Builder;
-import lombok.Data;
-import ru.practicum.shareit.booking.dto.BookingDtoForItem;
+import lombok.*;
 import ru.practicum.shareit.item.comment.dto.CommentDto;
 
 import java.util.List;
 
-@Data
 @Builder
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class ItemOutputDto {
     private Long id;
     private String name;
@@ -17,4 +20,17 @@ public class ItemOutputDto {
     private BookingDtoForItem lastBooking;
     private BookingDtoForItem nextBooking;
     private List<CommentDto> comments;
+
+
+    @Builder
+    @Getter
+    @Setter
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @EqualsAndHashCode(of = "id")
+    public static class BookingDtoForItem {
+        private Long id;
+        private Long bookerId;
+    }
 }

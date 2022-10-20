@@ -5,13 +5,13 @@ import lombok.*;
 import javax.validation.constraints.Future;
 import java.time.LocalDateTime;
 
+@Builder
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-@Builder
 public class InputBookingDto {
     private Long id;
 
