@@ -3,7 +3,6 @@ package ru.practicum.shareit.user.dto;
 import lombok.*;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
@@ -12,11 +11,9 @@ import javax.validation.constraints.NotBlank;
 @EqualsAndHashCode(of = "email")
 public class UserDto {
     private Long id;
-    @NotBlank(groups = {CreateUserValidate.class})
     private String name;
 
     @Email
-    @NotBlank(groups = {CreateUserValidate.class})
     private String email;
 
     public UserDto(String name, String email) {

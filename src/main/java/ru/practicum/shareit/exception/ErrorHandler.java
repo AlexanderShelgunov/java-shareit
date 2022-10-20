@@ -47,4 +47,13 @@ public class ErrorHandler {
         log.info("500 {}", e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse forbiddenException(final ForbiddenException e) {
+        log.info("403 {}", e.getMessage(), e);
+        return new ErrorResponse(e.getMessage());
+    }
+
+
 }
