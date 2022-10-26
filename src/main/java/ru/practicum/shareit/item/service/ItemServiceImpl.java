@@ -2,6 +2,8 @@ package ru.practicum.shareit.item.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.BookingRepository;
@@ -12,14 +14,16 @@ import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidateException;
 import ru.practicum.shareit.item.ItemRepository;
-import ru.practicum.shareit.item.comment.model.Comment;
 import ru.practicum.shareit.item.comment.CommentRepository;
 import ru.practicum.shareit.item.comment.dto.CommentDto;
 import ru.practicum.shareit.item.comment.dto.CommentMapper;
+import ru.practicum.shareit.item.comment.model.Comment;
 import ru.practicum.shareit.item.dto.ItemInputDto;
 import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.dto.ItemOutputDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.request.repository.ItemRequestRepository;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
@@ -36,17 +40,18 @@ public class ItemServiceImpl implements ItemService {
 
     @Autowired
     private ItemRepository itemRepository;
-
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private BookingRepository bookingRepository;
     @Autowired
     private CommentRepository commentRepository;
+    @Autowired
+    private ItemRequestRepository itemRequestRepository;
 
     @Override
-    public List<ItemOutputDto> getAllItemsByOwner(Long ownerId) {
-        return itemRepository.findAllByOrderByIdAsc().stream()
+    public List<ItemOutputDto> getAllItemsByOwner(Long ownerId, Integer from, Integer size) {
+        return itemRepository.findAll(getPageRequest(from, size)).stream()
                 .filter(item -> Objects.equals(item.getOwner().getId(), ownerId))
                 .map(item -> convertToItemOutputDto(item, ownerId))
                 .collect(Collectors.toList());
@@ -60,12 +65,30 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+
+    public List<ItemInputDto> searchItems(String query, Integer from, Integer size) {
+        if (query.isEmpty() || query.isBlank()) {
+            return Collections.emptyList();
+        } else {
+            return itemRepository.search(query, getPageRequest(from, size)).stream()
+                    .filter(Item::getAvailable)
+                    .map(ItemMapper::toItemDto)
+                    .collect(Collectors.toList());
+        }
+    }
+
+    @Override
     @Transactional
     public ItemInputDto createItem(ItemInputDto itemDto, Long ownerId) {
         validate(itemDto);
         User owner = userRepository.findById(ownerId)
                 .orElseThrow(() -> new NotFoundException("Пользователь c id=" + ownerId + " не найден."));
-        Item item = ItemMapper.fromItemDto(itemDto, owner);
+        ItemRequest itemRequest = null;
+        if (itemDto.getRequestId() != null) {
+            itemRequest = itemRequestRepository.findById(itemDto.getRequestId())
+                    .orElseThrow(() -> new NotFoundException("Запрос c id=" + itemDto.getRequestId() + " не найден."));
+        }
+        Item item = ItemMapper.fromItemDto(itemDto, owner, itemRequest);
         ItemInputDto itemInputDto = ItemMapper.toItemDto(itemRepository.save(item));
         log.info("Создан предмет с id={}", itemInputDto.getId());
         return itemInputDto;
@@ -102,21 +125,9 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemInputDto> searchItems(String query) {
-        if (query.isEmpty() || query.isBlank()) {
-            return Collections.emptyList();
-        } else {
-            return itemRepository.search(query).stream()
-                    .filter(Item::getAvailable)
-                    .map(ItemMapper::toItemDto)
-                    .collect(Collectors.toList());
-        }
-    }
-
-    @Override
     @Transactional
     public CommentDto createComment(Long userId, Long itemId, CommentDto commentDto) {
-        Booking booking = bookingRepository.getAllByBookerId(userId).stream()
+        Booking booking = bookingRepository.findAllByBookerId(userId).stream()
                 .filter(b -> b.getItem().getId().equals(itemId))
                 .filter(b -> b.getEnd().isBefore(LocalDateTime.now()))
                 .findFirst()
@@ -162,5 +173,11 @@ public class ItemServiceImpl implements ItemService {
         }
         itemOutputDto.setComments(comments);
         return itemOutputDto;
+    }
+
+    private PageRequest getPageRequest(Integer from, Integer size) {
+        int page = from < size ? 0 : from / size;
+
+        return PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "id"));
     }
 }
