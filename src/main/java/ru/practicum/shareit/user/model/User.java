@@ -26,19 +26,8 @@ public class User {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    //TODO
-//    public User(Long id) {
-//        this.id = id;
-//    }
-
-
-//    @Override
-//    public String toString() {
-//        return "User{" +
-//                "id=" + id +
-//                ", name='" + name + '\'' +
-//                ", email='" + email + '\'' +
-//                '}';
-//    }
-
+    public User(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
 }

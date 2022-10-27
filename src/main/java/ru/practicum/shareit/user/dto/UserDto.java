@@ -12,7 +12,10 @@ import javax.validation.constraints.Email;
 @EqualsAndHashCode(of = "email")
 public class UserDto {
     private Long id;
+
     private String name;
+
     @Email
     private String email;
+
 }
